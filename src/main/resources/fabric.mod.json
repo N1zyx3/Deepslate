@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "deepslate",
+	"version": "${version}",
+	"name": "Deepslate",
+	"description": "This is an example description!",
+	"authors": [
+		"N1zyyy"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/deepslate/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.n1zy.Deepslate"
+		],
+		"client": [
+			"net.n1zy.client.DeepslateClient"
+		],
+		"fabric-datagen": [
+			"net.n1zy.client.DeepslateDataGenerator"
+		]
+	},
+	"mixins": [
+		"deepslate.mixins.json",
+		{
+			"config": "deepslate.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
