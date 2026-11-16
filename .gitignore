@@ -32,6 +32,10 @@ bin/
 
 run/
 
+# local agent instructions (never push)
+
+AGENTS.md
+
 # java
 
 hs_err_*.log
