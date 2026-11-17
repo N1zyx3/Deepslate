@@ -3,6 +3,15 @@ plugins {
 	id 'maven-publish'
 }
 
+def mcVersion = sc.current.version
+def modId = property('mod.id') as String
+def modVersion = property('mod.version') as String
+def minecraftRange = property('deps.minecraft_range') as String
+
+// Produces {mod.id}-{mod.version}+{minecraft version}.jar for every node
+version = "${modVersion}+${mcVersion}"
+base.archivesName = modId
+
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
@@ -14,8 +23,11 @@ repositories {
 loom {
 	splitEnvironmentSourceSets()
 
+	// Loom expects fabric.mod.json in each version project; point it at the shared one.
+	fabricModJsonPath = rootProject.file('src/main/resources/fabric.mod.json')
+
 	mods {
-		"deepslate" {
+		"${modId}" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
@@ -25,25 +37,26 @@ loom {
 fabricApi {
 	configureDataGeneration {
 		client = true
-		modId = "deepslate"
+		modId = modId
 	}
 }
 
 dependencies {
-	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	// Versions for each node live in versions/<version>/gradle.properties
+	minecraft "com.mojang:minecraft:${mcVersion}"
+	implementation "net.fabricmc:fabric-loader:${property('deps.fabric_loader')}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric_api')}"
 }
 
 processResources {
 	def version = project.version
 	inputs.property "version", version
+	inputs.property "minecraft_range", minecraftRange
 
 	filesMatching("fabric.mod.json") {
-		expand "version": version
+		expand "version": version, "minecraft_range": minecraftRange
 	}
 }
 
@@ -62,11 +75,8 @@ java {
 }
 
 jar {
-	def projectName = project.name
-	inputs.property "projectName", projectName
-
 	from("LICENSE") {
-		rename { "${it}_$projectName"}
+		rename { "${it}_$modId"}
 	}
 }
 
