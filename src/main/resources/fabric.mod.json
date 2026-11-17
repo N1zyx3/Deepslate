@@ -40,9 +40,7 @@
 		"minecraft": "${minecraft_range}",
 		"java": ">=${java_version}",
 		"fabric-api": "*",
-		"yet_another_config_lib_v3": ">=${yacl_version}"
-	},
-	"suggests": {
+		"yet_another_config_lib_v3": ">=${yacl_version}",
 		"modmenu": ">=${modmenu_version}"
 	}
 }

@@ -70,7 +70,7 @@ dependencies {
 	// YACL is a hard dependency: it stores the mod config and renders the config screen.
 	implementation "dev.isxander:yet-another-config-lib:${nodeProp('deps.yacl')}"
 
-	// Mod Menu is optional; it only adds a button that opens the YACL screen.
+	// Mod Menu is a hard dependency: it provides the config button that opens the YACL screen.
 	implementation "com.terraformersmc:modmenu:${nodeProp('deps.modmenu')}"
 }
 

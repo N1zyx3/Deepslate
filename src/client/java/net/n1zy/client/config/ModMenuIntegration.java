@@ -4,9 +4,9 @@ import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 
 /**
- * Optional Mod Menu integration that opens the YACL screen.
+ * Mod Menu integration that opens the YACL screen from the mod's config button.
  *
- * <p>This class is only loaded when Mod Menu is installed.
+ * <p>Mod Menu is a required dependency, so this entrypoint is always present on the client.
  */
 public final class ModMenuIntegration implements ModMenuApi {
 	@Override
