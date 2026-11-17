@@ -3,10 +3,24 @@ plugins {
 	id 'maven-publish'
 }
 
+// All global settings live in the root gradle.properties.
+def prop = { String name ->
+	def value = findProperty(name)
+	if (value == null) {
+		throw new GradleException("Missing property '${name}' in gradle.properties")
+	}
+	value.toString()
+}
+
 def mcVersion = sc.current.version
-def modId = property('mod.id') as String
-def modVersion = property('mod.version') as String
-def minecraftRange = property('deps.minecraft_range') as String
+def modId = prop('mod.id')
+def modVersion = prop('mod.version')
+def javaVersion = prop('java.version') as int
+
+// Per-node values are stored in the root gradle.properties as <key>.<minecraft version>
+def nodeProp = { String name -> prop("${name}.${mcVersion}") }
+
+def minecraftRange = nodeProp('deps.minecraft_range')
 
 // Produces {mod.id}-{mod.version}+{minecraft version}.jar for every node
 version = "${modVersion}+${mcVersion}"
@@ -42,26 +56,37 @@ fabricApi {
 }
 
 dependencies {
-	// Versions for each node live in versions/<version>/gradle.properties
 	minecraft "com.mojang:minecraft:${mcVersion}"
-	implementation "net.fabricmc:fabric-loader:${property('deps.fabric_loader')}"
+	implementation "net.fabricmc:fabric-loader:${prop('deps.fabric_loader')}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	implementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric_api')}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${nodeProp('deps.fabric_api')}"
 }
 
 processResources {
-	def version = project.version
-	inputs.property "version", version
-	inputs.property "minecraft_range", minecraftRange
+	def expandProperties = [
+		"version"        : project.version,
+		"mod_id"         : modId,
+		"mod_name"       : prop('mod.name'),
+		"mod_description": prop('mod.description'),
+		"mod_authors"    : prop('mod.authors'),
+		"mod_license"    : prop('mod.license'),
+		"mod_homepage"   : prop('mod.homepage'),
+		"mod_sources"    : prop('mod.sources'),
+		"mod_icon"       : prop('mod.icon'),
+		"fabric_loader"  : prop('deps.fabric_loader'),
+		"java_version"   : javaVersion,
+		"minecraft_range": minecraftRange,
+	]
+	inputs.properties expandProperties
 
 	filesMatching("fabric.mod.json") {
-		expand "version": version, "minecraft_range": minecraftRange
+		expand expandProperties
 	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 25
+	it.options.release = javaVersion
 }
 
 java {
@@ -70,8 +95,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	sourceCompatibility = JavaVersion.toVersion(javaVersion)
+	targetCompatibility = JavaVersion.toVersion(javaVersion)
 }
 
 jar {
