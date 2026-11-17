@@ -4,6 +4,8 @@ import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
 
+import net.n1zy.config.DeepslateConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +23,17 @@ public class Deepslate implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
-		LOGGER.info("Hello Fabric world!");
+		// YACL reads (or creates) config/deepslate.json5 before anything uses the config.
+		DeepslateConfig.HANDLER.load();
+		DeepslateConfig config = DeepslateConfig.get();
+
+		if (config.debugLogging) {
+			LOGGER.debug("Configuration loaded: enabled={}, debugLogging={}", config.enabled, config.debugLogging);
+		}
+
+		if (config.enabled) {
+			LOGGER.info("Hello Fabric world!");
+		}
 	}
 
 	public static Identifier id(String path) {

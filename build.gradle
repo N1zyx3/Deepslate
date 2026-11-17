@@ -27,11 +27,16 @@ version = "${modVersion}+${mcVersion}"
 base.archivesName = modId
 
 repositories {
-	// Add repositories to retrieve artifacts from in here.
-	// You should only use this when depending on other mods because
-	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
-	// for more information about repositories.
+	// YACL — required config library and screen provider.
+	maven {
+		name = 'Xander Maven'
+		url = 'https://maven.isxander.dev/releases'
+	}
+	// Mod Menu — optional client entry point for the YACL config screen.
+	maven {
+		name = 'Terraformers'
+		url = 'https://maven.terraformersmc.com/'
+	}
 }
 
 loom {
@@ -61,6 +66,12 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${nodeProp('deps.fabric_api')}"
+
+	// YACL is a hard dependency: it stores the mod config and renders the config screen.
+	implementation "dev.isxander:yet-another-config-lib:${nodeProp('deps.yacl')}"
+
+	// Mod Menu is optional; it only adds a button that opens the YACL screen.
+	implementation "com.terraformersmc:modmenu:${nodeProp('deps.modmenu')}"
 }
 
 processResources {
@@ -77,6 +88,8 @@ processResources {
 		"fabric_loader"  : prop('deps.fabric_loader'),
 		"java_version"   : javaVersion,
 		"minecraft_range": minecraftRange,
+		"yacl_version"   : nodeProp('deps.yacl'),
+		"modmenu_version": nodeProp('deps.modmenu'),
 	]
 	inputs.properties expandProperties
 

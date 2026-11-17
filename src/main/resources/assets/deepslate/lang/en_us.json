@@ -1,0 +1,8 @@
+{
+	"deepslate.config.title": "Deepslate",
+	"deepslate.config.category.general": "General",
+	"deepslate.config.option.enabled": "Enable Deepslate",
+	"deepslate.config.option.enabled.tooltip": "Master switch for all Deepslate features.",
+	"deepslate.config.option.debug_logging": "Debug logging",
+	"deepslate.config.option.debug_logging.tooltip": "Write extra diagnostic output to the log."
+}

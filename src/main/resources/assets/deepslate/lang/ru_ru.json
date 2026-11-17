@@ -1,0 +1,8 @@
+{
+	"deepslate.config.title": "Deepslate",
+	"deepslate.config.category.general": "Основное",
+	"deepslate.config.option.enabled": "Включить Deepslate",
+	"deepslate.config.option.enabled.tooltip": "Главный переключатель всех функций Deepslate.",
+	"deepslate.config.option.debug_logging": "Отладочные логи",
+	"deepslate.config.option.debug_logging.tooltip": "Записывать дополнительную диагностическую информацию в лог."
+}

@@ -23,6 +23,9 @@
 		],
 		"fabric-datagen": [
 			"net.n1zy.client.DeepslateDataGenerator"
+		],
+		"modmenu": [
+			"net.n1zy.client.config.ModMenuIntegration"
 		]
 	},
 	"mixins": [
@@ -36,6 +39,10 @@
 		"fabricloader": ">=${fabric_loader}",
 		"minecraft": "${minecraft_range}",
 		"java": ">=${java_version}",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"yet_another_config_lib_v3": ">=${yacl_version}"
+	},
+	"suggests": {
+		"modmenu": ">=${modmenu_version}"
 	}
 }
